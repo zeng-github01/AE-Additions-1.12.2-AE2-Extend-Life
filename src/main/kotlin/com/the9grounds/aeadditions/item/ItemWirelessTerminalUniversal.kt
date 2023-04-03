@@ -40,7 +40,7 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
     val isTeEnabled = Integration.Mods.THAUMATICENERGISTICS.isEnabled
     val isMekEnabled = Integration.Mods.MEKANISMGAS.isEnabled
     val isWcEnabled = Integration.Mods.WIRELESSCRAFTING.isEnabled
-    val isAE2exVersion = AEApi
+//    val isAE2exVersion = AEApi
 
     private var holder: EntityPlayer? = null
 
