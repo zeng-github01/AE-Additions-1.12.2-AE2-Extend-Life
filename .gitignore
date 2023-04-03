@@ -1,0 +1,16 @@
+/*
+!/.gitignore
+!/src
+!/gradle
+!/gradlew
+!/gradlew.bat
+!/README.md
+!/License.txt
+!/build.gradle.old
+!/build.bat
+!/build.sh
+!/build.properties
+!/changelog.txt
+!/gradle.properties
+!/.gitlab-ci.yml
+!libs/*
