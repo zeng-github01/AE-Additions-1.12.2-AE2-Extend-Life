@@ -15,6 +15,7 @@ import com.the9grounds.aeadditions.integration.wct.WirelessCrafting
 import com.the9grounds.aeadditions.models.ModelManager
 import com.the9grounds.aeadditions.util.HandlerUniversalWirelessTerminal
 import com.the9grounds.aeadditions.wireless.ConfigManager
+import li.cil.oc.common.block.traits.GUI
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
@@ -39,19 +40,19 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
 
     val isTeEnabled = Integration.Mods.THAUMATICENERGISTICS.isEnabled
     val isMekEnabled = Integration.Mods.MEKANISMGAS.isEnabled
-    val isWcEnabled = Integration.Mods.WIRELESSCRAFTING.isEnabled
-//    val isAE2exVersion = AEApi
+//    val isWcEnabled = Integration.Mods.WIRELESSCRAFTING.isEnabled
 
     private var holder: EntityPlayer? = null
 
     init {
-        if (isWcEnabled) {
-            AEAApi.instance().registerWirelessTermHandler(this)
-            AEApi.instance().registries().wireless().registerWirelessHandler(this)
-        } else {
-            AEAApi.instance().registerWirelessTermHandler(HandlerUniversalWirelessTerminal)
-            AEApi.instance().registries().wireless().registerWirelessHandler(HandlerUniversalWirelessTerminal)
-        }
+        AEAApi.instance().registerWirelessTermHandler(this)
+        AEApi.instance().registries().wireless().registerWirelessHandler(this)
+//        if (isWcEnabled) {
+//
+//        } else {
+//            AEAApi.instance().registerWirelessTermHandler(HandlerUniversalWirelessTerminal)
+//            AEApi.instance().registries().wireless().registerWirelessHandler(HandlerUniversalWirelessTerminal)
+//        }
     }
 
     override fun isItemNormalWirelessTermToo(`is`: ItemStack?): Boolean = true
@@ -106,8 +107,10 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
             if (!tag.hasKey("type")) {
                 tag.setByte("type", 0)
             }
-            if (tag.getByte("type") == 4.toByte() && isWcEnabled) {
-                WirelessCrafting.openCraftingTerminal(player, player.inventory.currentItem)
+            // && isWcEnabled
+            if (tag.getByte("type") == 4.toByte()) {
+//                WirelessCrafting.openCraftingTerminal(player, player.inventory.currentItem)
+                AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
             }
             return ActionResult(EnumActionResult.SUCCESS, itemStack)
         }
@@ -123,12 +126,12 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
         }
 
         when (tag.getByte("type").toInt()) {
-            0 -> AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
-//            1 -> AEAApi.instance().openWirelessFluidTerminal(player, hand, world)
-            1 -> AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
             2 -> AEAApi.instance().openWirelessGasTerminal(player, hand, world)
-            4 -> AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
-            5 -> AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
+            else -> {
+                AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
+//            1 -> AEAApi.instance().openWirelessFluidTerminal(player, hand, world)
+
+            }
         }
 
         return ActionResult(EnumActionResult.SUCCESS, itemStack)

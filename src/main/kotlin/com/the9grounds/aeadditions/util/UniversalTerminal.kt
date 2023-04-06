@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack
 object UniversalTerminal {
     val isMekLoaded = Integration.Mods.MEKANISMGAS.isEnabled
     val isThaLoaded = Integration.Mods.THAUMATICENERGISTICS.isEnabled
-    val isWcLLoaded = Integration.Mods.WIRELESSCRAFTING.isEnabled
+//    val isWcLLoaded = Integration.Mods.WIRELESSCRAFTING.isEnabled
 
     @JvmStatic val wirelessTerminals: List<ItemStack>
     get() {
@@ -20,14 +20,19 @@ object UniversalTerminal {
         val terminalDefinition = AEApi.instance().definitions().items().wirelessTerminal().maybeStack(1).orElse(null)
         terminals.add(terminalDefinition)
         terminals.add(ItemEnum.FLUIDWIRELESSTERMINAL.getSizedStack(1))
+//        terminals.add(ItemEnum.CRAFTINGPATTERN.getSizedStack(1))
+        terminals.add(AEApi.instance().definitions().items().wirelessCraftingTerminal().maybeStack(1).orElse(null))
+        terminals.add(AEApi.instance().definitions().items().wirelessPatternTerminal().maybeStack(1).orElse(null))
 
         if (isMekLoaded) {
             terminals.add(ItemEnum.GASWIRELESSTERMINAL.getSizedStack(1))
         }
 
-        if (isWcLLoaded) {
-            terminals.add(WirelessCrafting.getCraftingTerminal())
-        }
+
+
+//        if (isWcLLoaded) {
+//            terminals.add(WirelessCrafting.getCraftingTerminal())
+//        }
 
         return terminals.toList()
     }
@@ -75,6 +80,10 @@ object UniversalTerminal {
         if (aeTermCrafting != null && item == aeTermCrafting.item && meta == aeTermCrafting.itemDamage) {
             return true
         }
+        val aeTermPattern = AEApi.instance().definitions().parts().patternTerminal().maybeStack(1).orElse(null)
+        if (aeTermPattern != null && item == aeTermPattern.item && meta == aeTermPattern.itemDamage){
+            return true
+        }
 
         return false
     }
@@ -98,17 +107,32 @@ object UniversalTerminal {
         if (item == fluidWirelessTerminal.item && meta == fluidWirelessTerminal.itemDamage) {
             return true
         }
+
+        val aefluidWirelessTerminal = AEApi.instance().definitions().items().wirelessFluidTerminal().maybeStack(1).orElse(null)
+        if (aefluidWirelessTerminal != null && item == aefluidWirelessTerminal.item && meta == aefluidWirelessTerminal.itemDamage){
+            return true
+        }
         val wirelessGasTerminal = ItemEnum.GASWIRELESSTERMINAL.getDamagedStack(0)
         if (item == wirelessGasTerminal.item && meta == wirelessGasTerminal.itemDamage) {
             return true
         }
 
-        if(isWcLLoaded) {
-            val wcTerm = WirelessCrafting.getCraftingTerminal()
-            if(item == wcTerm.item && meta == wcTerm.itemDamage) {
-                return true
-            }
+        val  wirelessCraftingTerminal = AEApi.instance().definitions().items().wirelessCraftingTerminal().maybeStack(1).orElse(null)
+        if (wirelessCraftingTerminal != null && item == wirelessCraftingTerminal.item && meta == wirelessCraftingTerminal.itemDamage){
+            return true
         }
+
+        val wirelessPatternTerminal = AEApi.instance().definitions().items().wirelessPatternTerminal().maybeStack(1).orElse(null)
+        if (wirelessPatternTerminal != null && item == wirelessPatternTerminal.item && meta == wirelessPatternTerminal.itemDamage){
+            return true
+        }
+
+//        if(isWcLLoaded) {
+//            val wcTerm = WirelessCrafting.getCraftingTerminal()
+//            if(item == wcTerm.item && meta == wcTerm.itemDamage) {
+//                return true
+//            }
+//        }
         return false
     }
 
@@ -137,6 +161,16 @@ object UniversalTerminal {
             return WirelessTerminalType.GAS
         }
 
+        val aeCraftingTerminal = AEApi.instance().definitions().parts().craftingTerminal().maybeStack(1).orElse(null)
+        if (aeCraftingTerminal != null && item == aeCraftingTerminal.item && meta == aeCraftingTerminal.itemDamage) {
+            return WirelessTerminalType.CRAFTING
+        }
+
+        val aeTerminalParttern = AEApi.instance().definitions().parts().patternTerminal().maybeStack(1).orElse(null)
+        if (aeTerminalParttern != null && item == aeTerminalParttern.item && meta == aeTerminalParttern.itemDamage){
+            return WirelessTerminalType.PATTERN
+        }
+
         // Wireless Terminals
         val aeWirelessTerminal = AEApi.instance().definitions().items().wirelessTerminal().maybeStack(1).orElse(null)
         if (aeWirelessTerminal != null && item == aeWirelessTerminal.item && meta == aeWirelessTerminal.itemDamage) {
@@ -146,22 +180,28 @@ object UniversalTerminal {
         if (item == wirelessFluidTerminal.item && meta == wirelessFluidTerminal.itemDamage) {
             return WirelessTerminalType.FLUID
         }
+        val aewiressFluidTerminal = AEApi.instance().definitions().items().wirelessFluidTerminal().maybeStack(1).orElse(null)
+        if (aewiressFluidTerminal != null && item == aewiressFluidTerminal.item && meta == aewiressFluidTerminal.itemDamage){
+            return  WirelessTerminalType.FLUID
+        }
         val wirelessGasTerminal = ItemEnum.GASWIRELESSTERMINAL.getDamagedStack(0)
         if (item == wirelessGasTerminal.item && meta == wirelessGasTerminal.itemDamage) {
             return WirelessTerminalType.GAS
         }
 
-        if(isWcLLoaded){
-            val aeCraftingTerminal = AEApi.instance().definitions().parts().craftingTerminal().maybeStack(1).orElse(null)
-            if (aeCraftingTerminal != null && item == aeCraftingTerminal.item && meta == aeCraftingTerminal.itemDamage) {
-                return WirelessTerminalType.CRAFTING
-            }
-
-            val wirelessCraftingTerminal = WirelessCrafting.getCraftingTerminal()
-            if(item == wirelessCraftingTerminal.item && meta == wirelessCraftingTerminal.itemDamage) {
-                return WirelessTerminalType.CRAFTING
-            }
+        val wirelessCraftingTerminal = AEApi.instance().definitions().items().wirelessCraftingTerminal().maybeStack(1).orElse(null)
+        if(item == wirelessCraftingTerminal.item && meta == wirelessCraftingTerminal.itemDamage) {
+            return WirelessTerminalType.CRAFTING
         }
+
+        val wirelessPatternTerminal = AEApi.instance().definitions().items().wirelessPatternTerminal().maybeStack(1).orElse(null)
+        if (wirelessPatternTerminal != null && item == wirelessPatternTerminal.item && meta == wirelessPatternTerminal.itemDamage){
+            return WirelessTerminalType.PATTERN
+        }
+
+//        if(isWcLLoaded){
+//
+//        }
         return null
     }
 }
