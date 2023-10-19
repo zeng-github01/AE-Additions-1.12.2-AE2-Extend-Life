@@ -124,6 +124,7 @@ com.the9grounds.aeadditions.tooltip.essentia=Essentia
 com.the9grounds.aeadditions.tooltip.installed=Installed:
 com.the9grounds.aeadditions.tooltip.crafting=Crafting
 com.the9grounds.aeadditions.tooltip.pattern=Pattern
+com.the9grounds.aeadditions.tooltip.interface=Interface
 com.the9grounds.aeadditions.tooltip.deprecated1=This item has been deprecated
 com.the9grounds.aeadditions.tooltip.deprecated2=Replaced by %s from Applied Energistics 2
 com.the9grounds.aeadditions.tooltip.deprecated.part=Place in crafting grid to convert
