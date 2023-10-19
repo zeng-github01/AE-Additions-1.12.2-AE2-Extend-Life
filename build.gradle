@@ -1,0 +1,358 @@
+buildscript {
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+        maven { url "https://plugins.gradle.org/m2/" }
+//        maven { url "https://files.minecraftforge.net/maven"}
+    }
+    dependencies {
+//        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+//        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
+    }
+}
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.3.50"
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'wtf.gofancy.fancygradle' version '1.1.+'
+}
+
+//apply plugin: 'net.minecraftforge.gradle.forge'
+//apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'idea'
+apply plugin: 'com.matthewprenger.cursegradle'
+
+ext.buildProps = file "gradle.properties"
+
+buildProps.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+version = getVersion()
+group = "com.the9grounds.aeadditions"
+archivesBaseName = "AEAdditions-${config.version.minecraft}"
+def actualVersion = version
+
+sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
+
+logger.lifecycle "$archivesBaseName-$version"
+logger.lifecycle "" + version
+//version = "${config.version.minecraft}-${config.version.forge}"
+
+minecraft {
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    mappings channel: 'stable', version: '39-1.12'
+//  makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+//    replace '@VERSION@', actualVersion
+
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            //JvmArgs += "-Dfml.coreMods.load=com.github.vfyjxf.nee.asm.NEELoadingPlugin"
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            //JvmArgs += "-Dfml.coreMods.load=com.github.vfyjxf.nee.asm.NEELoadingPlugin"
+        }
+    }
+}
+
+//minecraft {
+//    version = "${config.version.minecraft}-${config.version.forge}"
+//    runDir = "run"
+//    mappings = 'snapshot_20180814'
+//
+//    replace "@VERSION@", actualVersion
+//}
+
+//minecraft {
+//    version = "1.12.2-14.23.5.2847"
+//    runDir = "run"
+//    mappings = "stable_39"
+//    useDepAts = true
+//    makeObfSourceJar = false
+//}
+
+repositories {
+    gradlePluginPortal()
+    maven {
+        url "https://maven.shadowfacts.net/"
+    }
+    maven {
+        name 'Mobius Repo'
+        url "https://www.mobiusstrip.eu/maven/"
+    }
+
+    maven {
+        name 'Ender IO'
+        url = "https://maven.tterrag.com/"
+    }
+
+    maven {
+        name 'Open Computers'
+        url "https://maven.cil.li/"
+    }
+
+    maven {
+        name 'prog'
+        url "https://dvs1.progwml6.com/files/maven/"
+    }
+
+    maven {
+        name 'amadornes'
+        url "https://maven.amadornes.com/"
+    }
+
+    maven  {
+        name "BuildCraft Maven"
+        url "https://mod-buildcraft.com/maven/"
+    }
+
+    maven {
+        name = "CoFH Maven"
+        url = "https://maven.covers1624.net/"
+    }
+
+    maven {
+        name = 'IGW'
+        url = "https://maven.k-4u.nl/"
+    }
+
+    maven {
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
+    maven { url = "https://www.cursemaven.com" }
+    maven { url = "https://maven.hypherionmc.me/" }
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+    compileOnly "org.jetbrains.kotlin:kotlin-reflect:${config.kotlin_version}"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${config.kotlin_version}"
+
+    compile group: "net.shadowfacts", name: "Forgelin", version: "1.8.4"
+
+    compileOnly ("mcp.mobius.waila:Hwyla:${config.version.waila}:api") {
+        transitive = false
+    }
+
+    compileOnly "cofh:RedstoneFlux:${config.version.rf}:universal"
+
+    compileOnly ("cofh:CoFHCore:${config.version.cofh}:deobf") {
+        transitive = false
+    }
+
+    //deobfProvided ("li.cil.oc:OpenComputers:${config.version.oc}:api")
+    compileOnly ("li.cil.oc:OpenComputers:${config.version.oc}")
+
+    compileOnly "mezz.jei:jei_${config.version.minecraft}:${config.version.jei}:api"
+//    runtime "mezz.jei:jei_${config.version.minecraft}:${config.version.jei}"
+
+    compileOnly "com.mod-buildcraft:buildcraft-api:${config.version.bc}"
+    runtime "com.mod-buildcraft:buildcraft:${config.version.bc}"
+
+//    deobfCompile "igwmod:IGW-Mod-${config.version.minecraft}:${config.version.igw}:universal"
+
+//    deobfCompile "mekanism:Mekanism:${config.version.me}"
+    compileOnly "curse.maven:mekanism-268560:${config.version.me}"
+    compileOnly "p455w0rd:p455w0rdslib:${config.version.pl}"
+    compileOnly "p455w0rd:AE2WTLib:${config.version.wt}:api"
+    runtime "p455w0rd:AE2WTLib:${config.version.wt}"
+    compileOnly "p455w0rd:WirelessCraftingTerminal:${config.version.wc}:api"
+    runtime "p455w0rd:WirelessCraftingTerminal:${config.version.wc}"
+    compileOnly "p455w0rd:WirelessInterfaceTerminal:${config.version.wi}:api"
+    runtime "p455w0rd:WirelessInterfaceTerminal:${config.version.wi}"
+    runtime "p455w0rd:MouseTweaks:2.10"
+
+    compileOnly "curse.maven:gas-conduits-309756:3328809"
+
+//    deobfCompile ("appeng:appliedenergistics2:${config.version.ae}:api"){
+//        transitive = false
+//    }
+//    deobfCompile "curse.maven:applied-energistics-2-223794:2747063"
+    compileOnly 'curse.maven:ae2-extended-life-570458:4429430'
+    compileOnly "MCMultiPart2:MCMultiPart:${config.version.mcmp}"
+//    deobfCompile "baubles:Baubles:1.12:${config.version.baubles}"
+    compileOnly "curse.maven:baubles-227083:${config.version.baubles}"
+
+    compileOnly ("com.enderio:EnderIO:1.12.2-5.3.70:api") {
+        transitive = false
+    }
+
+    compileOnly ("com.enderio:EnderIO:1.12.2-5.3.70") {
+        transitive = false
+    }
+
+    compileOnly "com.enderio.core:EnderCore:1.12.2-0.5.76"
+
+    compile "info.loenwind.autoconfig:AutoConfig:1.12.2-1.0.2"
+    compile "info.loenwind.autosave:AutoSave:1.12.2-1.0.11"
+}
+
+processResources {
+    inputs.property "version", project.version
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.lang'
+        include '**/*.info'
+        include '**/*.properties'
+
+//        expand 'version': project.version, 'mc_version': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.lang'
+        exclude '**/*.info'
+        exclude '**/*.properties'
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+task apiJar(type: Jar) {
+//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    classifier = 'api'
+    from sourceSets.main.output
+    from sourceSets.main.java
+    from sourceSets.main.kotlin
+    include 'com/the9grounds/aeadditions/api/**'
+}
+
+if (System.getenv("CURSEFORGE_API_KEY") != null) {
+    curseforge {
+        apiKey = System.getenv("CURSEFORGE_API_KEY")
+
+        def localReleaseType = getReleaseType()
+
+        project {
+            id = config.cf.project.id
+            addGameVersion config.version.minecraft
+            changelogType = "markdown"
+            changelog = file('CHANGELOG.md')
+            releaseType = localReleaseType
+            relations {
+                requiredDependency 'applied-energistics-2'
+                requiredDependency 'shadowfacts-forgelin'
+                incompatible 'extra-cells-2-samlam140330s-fork'
+                incompatible 'extracells2'
+                incompatible 'xcpatch'
+            }
+            addArtifact(apiJar) {
+                releaseType = 'alpha'
+            }
+            mainArtifact(jar) {
+                displayName = "$archivesBaseName-${version}"
+            }
+        }
+    }
+}
+
+//sourceJar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+apiJar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+artifacts {
+    archives apiJar
+}
+
+def getBuildNumber() {
+
+    if (System.getenv("CI") == null) {
+        return "LOCAL"
+    }
+
+    if (System.getenv("TAG") != null) {
+        return null
+    }
+
+    if (System.getenv("GITHUB_HEAD_REF") != null) {
+        return "pr-${System.getenv("GITHUB_HEAD_REF")}-${System.getenv("SHORT_SHA")}"
+    }
+
+    return "ci-${System.getenv("BRANCH_NAME")}-${System.getenv("SHORT_SHA")}"
+}
+
+def getVersion() {
+    def buildNumber = getBuildNumber()
+
+    if (buildNumber == null) {
+        def tag = System.getenv("TAG")
+
+        return "${tag}"
+    }
+
+    return buildNumber
+}
+
+def getReleaseType() {
+    def preReleaseEnv = System.getenv("PRERELEASE")
+
+    if (preReleaseEnv == null) {
+        return "beta"
+    }
+
+    def preRelease = Boolean.parseBoolean(preReleaseEnv)
+
+    if (preRelease) {
+        return "beta"
+    }
+
+    return "release"
+}
+
+tasks.test {
+    enabled = gradle.startParameter.taskNames.contains("test")
+}
+
+idea {
+    module {
+        outputDir = file('build/classes/main')
+    }
+}
+
+def copy = tasks.create("copyResourceToClasses", Copy) {
+    into("$buildDir/classes/kotlin/main")
+    from(tasks.processResources.destinationDir)
+}
+copy.dependsOn(tasks.processResources)
+tasks.classes.dependsOn(copy)
