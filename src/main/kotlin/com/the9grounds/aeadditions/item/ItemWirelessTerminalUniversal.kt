@@ -12,6 +12,7 @@ import com.the9grounds.aeadditions.api.IWirelessFluidTermHandler
 import com.the9grounds.aeadditions.api.IWirelessGasTermHandler
 import com.the9grounds.aeadditions.integration.Integration
 import com.the9grounds.aeadditions.integration.wct.WirelessCrafting
+import com.the9grounds.aeadditions.integration.wit.WirelessInterface
 import com.the9grounds.aeadditions.models.ModelManager
 import com.the9grounds.aeadditions.util.HandlerUniversalWirelessTerminal
 import com.the9grounds.aeadditions.wireless.ConfigManager
@@ -32,14 +33,16 @@ import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import p455w0rd.ae2wtlib.api.client.IBaubleRender
 import p455w0rd.wct.api.IWirelessCraftingTerminalItem
+import p455w0rd.wit.api.WITApi
 import java.util.*
 
-@Optional.Interface(iface = "p455w0rd.wct.api.IWirelessCraftingTerminalItem", modid = "wct", striprefs = true)
+@Optional.Interface(iface = "p455w0rd.wit.api.IWirelessInterfaceTerminalItem", modid = "wit", striprefs = true)
 class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHandler, IWirelessGasTermHandler,
     IWirelessTermHandler, IWirelessCraftingTerminalItem {
 
     val isTeEnabled = Integration.Mods.THAUMATICENERGISTICS.isEnabled
     val isMekEnabled = Integration.Mods.MEKANISMGAS.isEnabled
+    val isWiEnabled = Integration.Mods.WirelessInterfaceTerminal.isEnabled
 //    val isWcEnabled = Integration.Mods.WIRELESSCRAFTING.isEnabled
 
     private var holder: EntityPlayer? = null
@@ -207,6 +210,18 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
             }
 
             5 -> {
+                if (isWiEnabled && installed.contains(WirelessTerminalType.INTERFACE)) {
+                    tag.setByte("type",6)
+                } else if (installed.contains(WirelessTerminalType.ITEM)) {
+                    tag.setByte("type", 0)
+                } else if (installed.contains(WirelessTerminalType.FLUID)) {
+                    tag.setByte("type", 1)
+                } else if (isMekEnabled && installed.contains(WirelessTerminalType.GAS)) {
+                    tag.setByte("type", 2)
+                }
+            }
+
+            6 -> {
                 if (installed.contains(WirelessTerminalType.ITEM)) {
                     tag.setByte("type", 0)
                 } else if (installed.contains(WirelessTerminalType.FLUID)) {
@@ -230,6 +245,8 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
                     tag.setByte("type", 4)
                 } else if (installed.contains(WirelessTerminalType.PATTERN)) {
                     tag.setByte("type", 5)
+                } else if (installed.contains(WirelessTerminalType.INTERFACE)) {
+                    tag.setByte("type",6)
                 }
             }
         }
@@ -321,39 +338,39 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
         items.add(itemStack)
     }
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun getRender(): IBaubleRender? = null
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun getBaubleType(itemStack: ItemStack?): BaubleType = BaubleType.TRINKET
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun initModel() {
         // Do Nothing
     }
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun getModelResource(item: Item?): ModelResourceLocation? = null
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun openGui(player: EntityPlayer?, isBauble: Boolean, playerSlot: Int) {
         if (player != null) {
-            WirelessCrafting.openCraftingTerminal(player, isBauble, playerSlot)
+            WirelessInterface.openInterfaceTerminal(player, isBauble, playerSlot)
         }
     }
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun getPlayer(): EntityPlayer? = this.holder
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun setPlayer(player: EntityPlayer?) {
         this.holder = player
     }
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun getColor(): Int = (0xFF8F15D4).toInt()
 
-    @Optional.Method(modid = "wct")
+    @Optional.Method(modid = "wit")
     override fun getMenuIcon(): ResourceLocation =
         ResourceLocation(Constants.MOD_ID, "textures/items/terminal.universal.wireless.png")
 }

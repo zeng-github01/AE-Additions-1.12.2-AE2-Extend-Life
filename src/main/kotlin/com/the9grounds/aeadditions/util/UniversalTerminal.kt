@@ -4,15 +4,18 @@ import appeng.api.AEApi
 import com.sun.org.apache.xpath.internal.operations.Bool
 import com.the9grounds.aeadditions.integration.Integration
 import com.the9grounds.aeadditions.integration.wct.WirelessCrafting
+import com.the9grounds.aeadditions.integration.wit.WirelessInterface
 import com.the9grounds.aeadditions.item.WirelessTerminalType
 import com.the9grounds.aeadditions.registries.ItemEnum
 import com.the9grounds.aeadditions.registries.PartEnum
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 
 object UniversalTerminal {
     val isMekLoaded = Integration.Mods.MEKANISMGAS.isEnabled
     val isThaLoaded = Integration.Mods.THAUMATICENERGISTICS.isEnabled
 //    val isWcLLoaded = Integration.Mods.WIRELESSCRAFTING.isEnabled
+    val isWiLoaded = Integration.Mods.WirelessInterfaceTerminal.isEnabled
 
     @JvmStatic val wirelessTerminals: List<ItemStack>
     get() {
@@ -26,6 +29,9 @@ object UniversalTerminal {
 
         if (isMekLoaded) {
             terminals.add(ItemEnum.GASWIRELESSTERMINAL.getSizedStack(1))
+        }
+        if (isWiLoaded) {
+            terminals.add(WirelessInterface.getInterfaceTerminal())
         }
 
 
@@ -85,6 +91,11 @@ object UniversalTerminal {
             return true
         }
 
+        val aeTermInterface = AEApi.instance().definitions().parts().interfaceTerminal().maybeStack(1).orElse(null)
+        if (aeTermInterface != null && item == aeTermInterface.item && meta == aeTermInterface.itemDamage){
+            return false
+        }
+
         return false
     }
 
@@ -125,6 +136,13 @@ object UniversalTerminal {
         val wirelessPatternTerminal = AEApi.instance().definitions().items().wirelessPatternTerminal().maybeStack(1).orElse(null)
         if (wirelessPatternTerminal != null && item == wirelessPatternTerminal.item && meta == wirelessPatternTerminal.itemDamage){
             return true
+        }
+
+        if (isWiLoaded){
+            val wiTerm = WirelessInterface.getInterfaceTerminal()
+            if (item == wiTerm.item && meta == wiTerm.itemDamage){
+                return true
+            }
         }
 
 //        if(isWcLLoaded) {

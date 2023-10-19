@@ -27,6 +27,7 @@ public class Integration {
 		THAUMATICENERGISTICS("thaumicenergistics", "Thaumatic Energistics"),
 		MEKANISM("mekanism"),
 		WIRELESSCRAFTING("wct", "AE2 Wireless Crafting Terminal"),
+		WirelessInterfaceTerminal("wit","Wireless Interface Terminal"),
 		JEI("jei", "Just Enough Items", Side.CLIENT),
 		BUILDCRAFTTOOLS("BuildCraftAPI|tools", "BuildCraft Wrench"),
 		COFHITEM("cofhapi|item", "COFH Hammer"),
