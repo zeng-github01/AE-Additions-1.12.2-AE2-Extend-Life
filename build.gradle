@@ -53,9 +53,9 @@ minecraft {
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: 'stable', version: '39-1.12'
-//  makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+//    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-//    replace '@VERSION@', actualVersion
+//    replace "@VERSION@", version
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -225,7 +225,7 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", getVersion()
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     from(sourceSets.main.resources.srcDirs) {
@@ -233,14 +233,15 @@ processResources {
         include '**/*.info'
         include '**/*.properties'
 
-//        expand 'version': project.version, 'mc_version': project.minecraft.version
+        include 'mcmod.info'
+        expand 'version': version, 'mcversion': '1.12.2'
     }
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.lang'
-        exclude '**/*.info'
-        exclude '**/*.properties'
-    }
+//    from(sourceSets.main.resources.srcDirs) {
+//        exclude '**/*.lang'
+//        exclude '**/*.info'
+//        exclude '**/*.properties'
+//    }
 }
 
 compileKotlin {

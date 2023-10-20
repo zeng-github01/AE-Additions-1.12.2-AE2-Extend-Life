@@ -32,13 +32,13 @@ import net.minecraftforge.fml.common.network.IGuiHandler
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import p455w0rd.ae2wtlib.api.client.IBaubleRender
-import p455w0rd.wct.api.IWirelessCraftingTerminalItem
+import p455w0rd.wit.api.IWirelessInterfaceTerminalItem
 import p455w0rd.wit.api.WITApi
 import java.util.*
 
 @Optional.Interface(iface = "p455w0rd.wit.api.IWirelessInterfaceTerminalItem", modid = "wit", striprefs = true)
 class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHandler, IWirelessGasTermHandler,
-    IWirelessTermHandler, IWirelessCraftingTerminalItem {
+    IWirelessTermHandler, IWirelessInterfaceTerminalItem {
 
     val isTeEnabled = Integration.Mods.THAUMATICENERGISTICS.isEnabled
     val isMekEnabled = Integration.Mods.MEKANISMGAS.isEnabled
