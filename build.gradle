@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
 //        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-//        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
         classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
     }
 }
@@ -52,7 +51,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'stable', version: '39-1.12'
+    mappings channel: 'snapshot', version: '20180814-1.12'
 //    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
 //    replace "@VERSION@", version
@@ -87,22 +86,6 @@ minecraft {
         }
     }
 }
-
-//minecraft {
-//    version = "${config.version.minecraft}-${config.version.forge}"
-//    runDir = "run"
-//    mappings = 'snapshot_20180814'
-//
-//    replace "@VERSION@", actualVersion
-//}
-
-//minecraft {
-//    version = "1.12.2-14.23.5.2847"
-//    runDir = "run"
-//    mappings = "stable_39"
-//    useDepAts = true
-//    makeObfSourceJar = false
-//}
 
 repositories {
     gradlePluginPortal()
@@ -225,7 +208,7 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", getVersion()
+    inputs.property "version", version
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     from(sourceSets.main.resources.srcDirs) {
@@ -236,12 +219,6 @@ processResources {
         include 'mcmod.info'
         expand 'version': version, 'mcversion': '1.12.2'
     }
-
-//    from(sourceSets.main.resources.srcDirs) {
-//        exclude '**/*.lang'
-//        exclude '**/*.info'
-//        exclude '**/*.properties'
-//    }
 }
 
 compileKotlin {
@@ -251,7 +228,6 @@ compileKotlin {
 }
 
 task apiJar(type: Jar) {
-//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     classifier = 'api'
     from sourceSets.main.output
     from sourceSets.main.java
@@ -291,6 +267,7 @@ if (System.getenv("CURSEFORGE_API_KEY") != null) {
 //sourceJar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 apiJar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//processResources.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
 artifacts {
     archives apiJar
