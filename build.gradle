@@ -197,7 +197,6 @@ dependencies {
     runtime "p455w0rd:WirelessCraftingTerminal:${config.version.wc}"
     compileOnly "p455w0rd:WirelessInterfaceTerminal:${config.version.wi}:api"
     runtime "p455w0rd:WirelessInterfaceTerminal:${config.version.wi}"
-    runtime "p455w0rd:MouseTweaks:2.10"
 
     compileOnly "curse.maven:gas-conduits-309756:3328809"
 
@@ -205,7 +204,8 @@ dependencies {
 //        transitive = false
 //    }
 //    deobfCompile "curse.maven:applied-energistics-2-223794:2747063"
-    compileOnly 'curse.maven:ae2-extended-life-570458:4796184'
+//    compileOnly 'curse.maven:ae2-extended-life-570458:4796184:api'
+    implementation files('libs/appliedenergistics2-rv6-stable-7-extended_life-v0.55.26-dev.jar')
     compileOnly "MCMultiPart2:MCMultiPart:${config.version.mcmp}"
 //    deobfCompile "baubles:Baubles:1.12:${config.version.baubles}"
     compileOnly "curse.maven:baubles-227083:${config.version.baubles}"
@@ -222,6 +222,7 @@ dependencies {
 
     compile "info.loenwind.autoconfig:AutoConfig:1.12.2-1.0.2"
     compile "info.loenwind.autosave:AutoSave:1.12.2-1.0.11"
+    compileOnly "curse.maven:mouse-tweaks-60089:2671937"
 }
 
 processResources {
