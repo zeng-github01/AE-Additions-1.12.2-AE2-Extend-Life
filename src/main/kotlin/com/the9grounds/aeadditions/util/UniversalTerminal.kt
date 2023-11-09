@@ -93,7 +93,7 @@ object UniversalTerminal {
 
         val aeTermInterface = AEApi.instance().definitions().parts().interfaceTerminal().maybeStack(1).orElse(null)
         if (aeTermInterface != null && item == aeTermInterface.item && meta == aeTermInterface.itemDamage){
-            return false
+            return true
         }
 
         return false
@@ -189,6 +189,11 @@ object UniversalTerminal {
             return WirelessTerminalType.PATTERN
         }
 
+        val aeTerminalInterface = AEApi.instance().definitions().parts().interfaceTerminal().maybeStack(1).orElse(null)
+        if (aeTerminalInterface != null && item == aeTerminalInterface.item && meta == aeTerminalInterface.itemDamage){
+            return WirelessTerminalType.INTERFACE
+        }
+
         // Wireless Terminals
         val aeWirelessTerminal = AEApi.instance().definitions().items().wirelessTerminal().maybeStack(1).orElse(null)
         if (aeWirelessTerminal != null && item == aeWirelessTerminal.item && meta == aeWirelessTerminal.itemDamage) {
@@ -215,6 +220,13 @@ object UniversalTerminal {
         val wirelessPatternTerminal = AEApi.instance().definitions().items().wirelessPatternTerminal().maybeStack(1).orElse(null)
         if (wirelessPatternTerminal != null && item == wirelessPatternTerminal.item && meta == wirelessPatternTerminal.itemDamage){
             return WirelessTerminalType.PATTERN
+        }
+
+        if (isWiLoaded){
+            val wirelessInterfaceTerminal = WirelessInterface.getInterfaceTerminal();
+            if (wirelessInterfaceTerminal != null && item == wirelessInterfaceTerminal.item && meta == wirelessInterfaceTerminal.itemDamage){
+                return WirelessTerminalType.INTERFACE
+            }
         }
 
 //        if(isWcLLoaded){

@@ -77,6 +77,7 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
             1 -> return GuiBridge.GUI_WIRELESS_FLUID_TERMINAL
             4 -> return GuiBridge.GUI_WIRELESS_CRAFTING_TERMINAL
             5 -> return GuiBridge.GUI_WIRELESS_PATTERN_TERMINAL
+            6 -> return GuiBridge.GUI_INTERFACE_TERMINAL;
         }
 
         return GuiBridge.GUI_WIRELESS_TERM;
@@ -111,9 +112,10 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
                 tag.setByte("type", 0)
             }
             // && isWcEnabled
-            if (tag.getByte("type") == 4.toByte()) {
+            if (isWiEnabled && tag.getByte("type") == 6.toByte()) {
 //                WirelessCrafting.openCraftingTerminal(player, player.inventory.currentItem)
-                AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
+//                AEApi.instance().registries().wireless().openWirelessTerminalGui(itemStack, world, player)
+                WirelessInterface.openInterfaceTerminal(player,player.inventory.currentItem)
             }
             return ActionResult(EnumActionResult.SUCCESS, itemStack)
         }
@@ -155,6 +157,8 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
                     tag.setByte("type", 3)
                 } else if (installed.contains(WirelessTerminalType.CRAFTING)) {
                     tag.setByte("type", 4)
+                } else if (isWiEnabled && installed.contains(WirelessTerminalType.INTERFACE)) {
+                    tag.setByte("type",6);
                 }
             }
 
@@ -168,6 +172,8 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
                     tag.setByte("type", 4)
                 } else if (installed.contains(WirelessTerminalType.ITEM)) {
                     tag.setByte("type", 0)
+                } else if (isWiEnabled && installed.contains(WirelessTerminalType.INTERFACE)) {
+                    tag.setByte("type",6);
                 }
             }
 
@@ -181,6 +187,8 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
                     tag.setByte("type", 0)
                 } else if (installed.contains(WirelessTerminalType.FLUID)) {
                     tag.setByte("type", 1)
+                } else if (isWiEnabled && installed.contains(WirelessTerminalType.INTERFACE)) {
+                    tag.setByte("type",6);
                 }
             }
 
@@ -194,6 +202,8 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
                     tag.setByte("type", 1)
                 } else if (isMekEnabled && installed.contains(WirelessTerminalType.GAS)) {
                     tag.setByte("type", 2)
+                } else if (isWiEnabled && installed.contains(WirelessTerminalType.INTERFACE)) {
+                    tag.setByte("type",6);
                 }
             }
 
@@ -206,6 +216,8 @@ class ItemWirelessTerminalUniversal : WirelessTermBase(), IWirelessFluidTermHand
                     tag.setByte("type", 1)
                 } else if (isMekEnabled && installed.contains(WirelessTerminalType.GAS)) {
                     tag.setByte("type", 2)
+                } else if (isWiEnabled && installed.contains(WirelessTerminalType.INTERFACE)) {
+                    tag.setByte("type",6);
                 }
             }
 
